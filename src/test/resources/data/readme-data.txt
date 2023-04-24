@@ -1,0 +1,1 @@
+This folder can be used to keep the data files like csv etc.
