@@ -1,0 +1,22 @@
+package gatlingDemoStore.pageObjects;
+
+  // class to hold the cart related actions
+  private static class Cart{
+    // ViewCart
+    private static final ChainBuilder viewCart =
+    doIf(session -> !session.getBoolean("customerLoggedIn"))
+      .then(exec(User.login))
+    .exec(
+      http("ViewCart")
+      .get("/cart/view")
+      .check(css("#grandTotal").isEL("$#{totalCartValue}"))
+    ); 
+
+    // CheckoutCart
+    private static final ChainBuilder checkoutCart =
+      exec(
+        http("CheckoutCart")
+        .get("/cart/checkout")
+        .check(substring("Thanks for your order! See you soon!"))
+      );
+  }
