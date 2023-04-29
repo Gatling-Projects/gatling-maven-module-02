@@ -1,0 +1,33 @@
+package gatlingDemoStore.pageObjects;
+  
+  // class to hold the User related actions
+  public final class User{
+    // UserLogin
+    public static final ChainBuilder login =
+      feed(loginFeeder)
+      .exec(
+        http("LoadLoginPage")
+        .get("/login")
+        .check(substring("Username:"))
+      )
+      .exec(
+        session -> {
+          System.out.println("customerLoggedIn: " + session.get("customerLoggedIn").toString());
+          return session;
+        }
+      )
+      .exec(
+        http("UserLogin")
+        .post("/login")
+        .formParam("_csrf", "#{csrfToken}")
+        .formParam("username", "#{username}")
+        .formParam("password", "#{password}")
+      )
+      .exec(session -> session.set("customerLoggedIn", true))
+      .exec(
+        session -> {
+          System.out.println("customerLoggedIn: " + session.get("customerLoggedIn").toString());
+          return session;
+        }
+      );
+  } 
